@@ -27,20 +27,35 @@ public class XMLMapperBuilder {
 
         List<Element> list = rootElement.selectNodes("//select");
         for (Element element : list) {
-            String id = element.attributeValue("id");
-            String resultType = element.attributeValue("resultType");
-            String paramterType = element.attributeValue("paramterType");
-            String sqlText = element.getTextTrim();
-            MappedStatement mappedStatement = new MappedStatement();
-            mappedStatement.setId(id);
-            mappedStatement.setResultType(resultType);
-            mappedStatement.setParamterType(paramterType);
-            mappedStatement.setSql(sqlText);
-            String key = namespace+"."+id;
-            configuration.getMappedStatementMap().put(key,mappedStatement);
-
+            deal(element,namespace);
+        }
+        List<Element> updates = rootElement.selectNodes("//update");
+        for (Element element : updates) {
+            deal(element,namespace);
+        }
+        List<Element> inserts = rootElement.selectNodes("//insert");
+        for (Element element : inserts) {
+            deal(element,namespace);
+        }
+        List<Element> deletes = rootElement.selectNodes("//delete");
+        for (Element element : deletes) {
+            deal(element,namespace);
         }
 
+    }
+
+    private void deal(Element element,String namespace){
+        String id = element.attributeValue("id");
+        String resultType = element.attributeValue("resultType");
+        String paramterType = element.attributeValue("paramterType");
+        String sqlText = element.getTextTrim();
+        MappedStatement mappedStatement = new MappedStatement();
+        mappedStatement.setId(id);
+        mappedStatement.setResultType(resultType);
+        mappedStatement.setParamterType(paramterType);
+        mappedStatement.setSql(sqlText);
+        String key = namespace+"."+id;
+        configuration.getMappedStatementMap().put(key,mappedStatement);
     }
 
 
